@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextField } from '../TextField';
 import { Movie } from '../../types/Movie';
 
@@ -19,7 +19,7 @@ export const NewMovie: React.FC<NewMovieProps> = ({ onAdd }) => {
   });
   const [activeSubmit, setActiveSubmit] = useState(true);
 
-  const validateForm = () => {
+  useEffect(() => {
     const isValid =
       form.title.trim() !== '' &&
       form.imgUrl.trim() !== '' &&
@@ -27,16 +27,10 @@ export const NewMovie: React.FC<NewMovieProps> = ({ onAdd }) => {
       form.imdbId.trim() !== '';
 
     setActiveSubmit(!isValid);
-  };
+  }, [form]);
 
   function handleChange(field: keyof typeof form, value: string) {
-    setForm(prevForm => {
-      const updatedForm = { ...prevForm, [field]: value };
-
-      validateForm();
-
-      return updatedForm;
-    });
+    setForm(prevForm => ({ ...prevForm, [field]: value }));
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
